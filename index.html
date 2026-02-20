@@ -239,6 +239,81 @@
             </div>
         </main>
         
+        <main class="page-content" id="chat-tab">
+            <div class="row justify-content-center mt-4">
+                <div class="col-lg-10 text-center">
+                    <h2 class="text-warning mb-3"><i class="fa-solid fa-language"></i> المترجم الصوتي الفوري</h2>
+                    <p class="text-light fs-5 mb-4">تواصل بحرية مع أي شخص في العالم. ستقوم الأداة بالترجمة الفورية بينك وبين الطرف الآخر.</p>
+                    
+                    <div class="card-dark mb-4 text-center" style="border: 1px solid var(--neon);">
+                        <div class="row">
+                            <div class="col-md-6 mb-3 mb-md-0">
+                                <label class="text-neon fw-bold mb-2"><i class="fa-solid fa-user"></i> لغتي المريحة (أقرأ وأكتب بها):</label>
+                                <select id="my-lang" class="input-dark mb-0">
+                                    <option value="ar-EG">العربية (مصر)</option>
+                                    <option value="ar-SA">العربية (السعودية)</option>
+                                    <option value="en-US">English (الإنجليزية)</option>
+                                    <option value="fr-FR">Français (الفرنسية)</option>
+                                    <option value="de-DE">Deutsch (الألمانية)</option>
+                                    <option value="es-ES">Español (الإسبانية)</option>
+                                    <option value="it-IT">Italiano (الإيطالية)</option>
+                                    <option value="ru-RU">Русский (الروسية)</option>
+                                    <option value="tr-TR">Türkçe (التركية)</option>
+                                    <option value="zh-CN">中文 (الصينية)</option>
+                                    <option value="ja-JP">日本語 (اليابانية)</option>
+                                    <option value="ko-KR">한국어 (الكورية)</option>
+                                    <option value="hi-IN">हिन्दी (الهندية)</option>
+                                    <option value="ur-PK">اردو (الأردية)</option>
+                                </select>
+                            </div>
+                            <div class="col-md-6">
+                                <label class="text-warning fw-bold mb-2"><i class="fa-solid fa-globe"></i> لغة الطرف الآخر (يتحدث ويستمع بها):</label>
+                                <select id="other-lang" class="input-dark mb-0">
+                                    <option value="en-US">English (الإنجليزية)</option>
+                                    <option value="ar-EG">العربية (مصر)</option>
+                                    <option value="ar-SA">العربية (السعودية)</option>
+                                    <option value="fr-FR">Français (الفرنسية)</option>
+                                    <option value="de-DE">Deutsch (الألمانية)</option>
+                                    <option value="es-ES">Español (الإسبانية)</option>
+                                    <option value="it-IT">Italiano (الإيطالية)</option>
+                                    <option value="ru-RU">Русский (الروسية)</option>
+                                    <option value="tr-TR">Türkçe (التركية)</option>
+                                    <option value="zh-CN">中文 (الصينية)</option>
+                                    <option value="ja-JP">日本語 (اليابانية)</option>
+                                    <option value="ko-KR">한국어 (الكورية)</option>
+                                    <option value="hi-IN">हिन्दी (الهندية)</option>
+                                    <option value="ur-PK">اردو (الأردية)</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row mt-4">
+                        <div class="col-md-6 mb-4">
+                            <div class="card-dark h-100">
+                                <h4 class="text-neon mb-3"><i class="fa-solid fa-ear-listen"></i> استماع للطرف الآخر</h4>
+                                <p class="text-muted" style="font-size: 14px;">اضغط هنا واجعل الشخص الآخر يتحدث، وسنترجم كلامه لتتمكن من قراءته بلغتك.</p>
+                                <button id="btn-record" class="btn-neon-large w-100 mb-3" onclick="startRecording()">
+                                    <i class="fa-solid fa-microphone"></i> استماع وترجمة
+                                </button>
+                                <textarea id="stt-result" class="input-dark mb-0" rows="4" placeholder="سيظهر كلامه مترجماً هنا لتتمكن من قراءته..." readonly></textarea>
+                            </div>
+                        </div>
+                        <div class="col-md-6 mb-4">
+                            <div class="card-dark h-100">
+                                <h4 class="text-warning mb-3"><i class="fa-solid fa-keyboard"></i> التحدث للطرف الآخر</h4>
+                                <p class="text-muted" style="font-size: 14px;">اكتب رسالتك بلغتك، وسنقوم بترجمتها ونطقها بصوت مسموع ليفهمها الطرف الآخر.</p>
+                                <textarea id="tts-input" class="input-dark" rows="3" placeholder="اكتب رسالتك هنا..."></textarea>
+                                <button id="btn-speak" class="w-100 p-3 fw-bold rounded-3 border-0" style="background: #f39c12; color:#141416; font-size: 18px; cursor: pointer; transition: 0.3s;" onclick="speakText()">
+                                    <i class="fa-solid fa-volume-high"></i> نطق الرسالة للطرف الآخر
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </main>
+
         <main class="page-content" id="settings-tab">
             <div class="card-dark mt-4">
                 <h4 class="text-neon mb-4"><i class="fa-solid fa-sliders"></i> لوحة الإعدادات</h4>

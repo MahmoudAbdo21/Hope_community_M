@@ -290,22 +290,22 @@ function deleteData(key, id, reloadFunc) { if(confirm('تأكيد الحذف؟')
 
 // ================= المحادثة والمترجم الذكي =================
 
-// دالة لترجمة النصوص باستخدام API مجاني
+// جلب الأصوات من جهاز المستخدم مسبقاً
+let availableVoices = [];
+window.speechSynthesis.onvoiceschanged = () => { availableVoices = window.speechSynthesis.getVoices(); };
+
 async function translateText(text, fromLang, toLang) {
-    // استخراج أول حرفين من كود اللغة (مثل: en-US تصبح en)
     let from = fromLang.substring(0, 2);
     let to = toLang.substring(0, 2);
-    
-    // لو اللغتين زي بعض مش محتاجين ترجمة
+    // لو اللغتين زي بعض، مش محتاجين نترجم، هنرجع النص زي ما هو
     if(from === to) return text; 
-
+    
     try {
         let res = await fetch(`https://api.mymemory.translated.net/get?q=${encodeURIComponent(text)}&langpair=${from}|${to}`);
         let data = await res.json();
-        return data.responseData.translatedText;
+        return data.responseData.translatedText || text;
     } catch(e) {
-        console.error("Translation error", e);
-        return text; // لو حصل خطأ في النت يعرض النص الأصلي
+        console.error(e); return text; 
     }
 }
 
@@ -313,66 +313,77 @@ function startRecording() {
     const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
     if (!SpeechRecognition) return alert("متصفحك لا يدعم هذه الميزة. يرجى استخدام Google Chrome.");
     
-    let myLang = document.getElementById('my-lang').value;
     let otherLang = document.getElementById('other-lang').value;
+    let myLang = document.getElementById('my-lang').value;
 
     const recognition = new SpeechRecognition(); 
-    recognition.lang = otherLang; // بنستمع للغة الطرف الآخر
+    recognition.lang = otherLang; // بنسمع بلغة الطرف الآخر
     recognition.interimResults = false;
     
     let btn = document.getElementById('btn-record'); 
-    btn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> جاري الاستماع له...'; 
+    let originalHtml = btn.innerHTML;
+    btn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> جاري الاستماع...'; 
     btn.style.background = "#ff4d4d"; 
     
     recognition.start();
     
     recognition.onresult = async event => {
         let originalText = event.results[0][0].transcript;
-        
-        // تغيير شكل الزرار أثناء الترجمة
         btn.innerHTML = '<i class="fa-solid fa-language fa-fade"></i> جاري الترجمة...';
         btn.style.background = "#17a2b8"; 
 
-        // ترجمة الكلام من لغة الطرف الآخر إلى لغتي
         let translatedText = await translateText(originalText, otherLang, myLang);
         document.getElementById('stt-result').value = translatedText;
         
-        resetMicBtn(btn);
+        btn.innerHTML = originalHtml; btn.style.background = "var(--neon)";
     };
     
-    recognition.onspeechend = () => { recognition.stop(); };
-    recognition.onerror = event => { alert("خطأ في المايك: " + event.error); resetMicBtn(btn); };
-}
-
-function resetMicBtn(btn) {
-    btn.innerHTML = '<i class="fa-solid fa-microphone"></i> استماع وترجمة'; 
-    btn.style.background = "var(--neon)";
+    recognition.onspeechend = () => recognition.stop();
+    recognition.onerror = event => { alert("لم يتم سماع شيء بوضوح، حاول مجدداً."); btn.innerHTML = originalHtml; btn.style.background = "var(--neon)"; };
 }
 
 async function speakText() {
     let text = document.getElementById('tts-input').value; 
-    if(!text) return alert("يرجى كتابة نص أولاً!");
-    if (!window.speechSynthesis) return alert("متصفحك لا يدعم قراءة النصوص.");
+    if(!text) return alert("اكتب رسالة أولاً!");
+    if (!window.speechSynthesis) return alert("متصفحك لا يدعم النطق الصوتي.");
 
     let myLang = document.getElementById('my-lang').value;
     let otherLang = document.getElementById('other-lang').value;
     
     let btn = document.getElementById('btn-speak');
     let originalHtml = btn.innerHTML;
-    btn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> جاري الترجمة...';
+    btn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> جاري التجهيز...';
 
-    // ترجمة الكلام من لغتي إلى لغة الطرف الآخر
+    // نترجم الكلام الأول للغة الطرف الآخر
     let translatedText = await translateText(text, myLang, otherLang);
     btn.innerHTML = '<i class="fa-solid fa-volume-high fa-beat"></i> جاري النطق...';
 
     let utterance = new SpeechSynthesisUtterance(translatedText); 
-    utterance.lang = otherLang; // النطق بلغة الطرف الآخر
-    utterance.rate = 0.80; // سرعة هادية ومفهومة
+    utterance.lang = otherLang; 
+    utterance.rate = 0.6; // السرعة بطيئة ومفهومة جداً (0.6 بدل 0.8)
     
-    utterance.onend = () => { btn.innerHTML = originalHtml; };
+    // الصياد الذكي: البحث عن صوت مصري أو عربي حقيقي في الجهاز
+    if (availableVoices.length === 0) availableVoices = window.speechSynthesis.getVoices();
+    let voice = availableVoices.find(v => v.lang.replace('_', '-') === otherLang) || availableVoices.find(v => v.lang.startsWith(otherLang.substring(0, 2)));
+    
+    if (otherLang === 'ar-EG' || otherLang === 'ar-SA') {
+        let arabicVoice = availableVoices.find(v => v.lang === 'ar-EG' || v.name.includes('Egypt') || v.name.includes('Hoda') || v.name.includes('Naayf') || v.name.includes('Arabic'));
+        if (arabicVoice) voice = arabicVoice;
+    }
+    
+    if (voice) utterance.voice = voice;
+
+    utterance.onend = () => btn.innerHTML = originalHtml;
+    utterance.onerror = () => btn.innerHTML = originalHtml;
+    
     window.speechSynthesis.speak(utterance);
 }
 
+function generateGithubCode() {
+    let data = { siteName: localStorage.getItem('siteName'), siteLogo: localStorage.getItem('siteLogo'), adminProfilePic: localStorage.getItem('adminProfilePic'), my_news: localStorage.getItem('my_news'), signs_cats: localStorage.getItem('signs_cats'), books_cats: localStorage.getItem('books_cats'), schools_data: localStorage.getItem('schools_data') };
+    let code = `const defaultData = ${JSON.stringify(data, null, 4)};`;
+    navigator.clipboard.writeText(code).then(() => alert('تم نسخ كود البيانات بنجاح!\n\n1. قم بإنشاء ملف باسم data.js\n2. الصق الكود بداخله.\n3. ارفعه مع ملفات المشروع على GitHub.')).catch(err => { alert('حدث خطأ في النسخ، يرجى فتح Console (F12) لنسخه يدوياً.'); console.log(code); });
+}
 // ================= أداة استخراج الكود =================
 function generateGithubCode() {
     let data = { siteName: localStorage.getItem('siteName'), siteLogo: localStorage.getItem('siteLogo'), adminProfilePic: localStorage.getItem('adminProfilePic'), my_news: localStorage.getItem('my_news'), signs_cats: localStorage.getItem('signs_cats'), books_cats: localStorage.getItem('books_cats'), schools_data: localStorage.getItem('schools_data') };
