@@ -62,7 +62,7 @@
                 <div class="col-md-6 text-right z-index-2">
                     <h2 class="text-warning mb-2">مرحباً،</h2>
                     <h1 class="display-4 fw-bold text-white mb-2">انا محمود عبدالرحمن</h1>
-                    <h3 class="text-neon mb-4">تكنولوجيا التعليم - جامعة حلوان</h3>
+                    <h3 class="text-neon mb-4">تكنولوجيا التعليم - جامعة العاصمة</h3>
                     <p class="fs-5 mb-4" style="max-width: 90%; color: #E2E8F0; line-height: 1.8;">
                         هذه المنصة هي مشروع متكامل يهدف إلى دمج وتسهيل التواصل لذوي الهمم (الصم وضعاف السمع) باستخدام أحدث أدوات التكنولوجيا وتصميم واجهات المستخدم.
                     </p>
@@ -88,17 +88,28 @@
         <main class="page-content" id="news-tab">
             <div class="row justify-content-center mt-4">
                 <div class="col-lg-8">
+                    
                     <div class="card-dark admin-only mb-4" style="display: none;">
-                        <h5 class="text-neon mb-3"><i class="fa-solid fa-pen-nib"></i> إضافة خبر جديد</h5>
-                        <textarea id="news-text" class="input-dark" rows="3" placeholder="اكتب تفاصيل الخبر هنا..."></textarea>
-                        <div class="d-flex gap-2 mt-2">
-                            <label class="btn-outline w-50 text-center"><i class="fa-solid fa-image"></i> إرفاق صورة <input type="file" id="news-image" style="display: none;" onchange="previewNewsImage(event)"></label>
-                            <input type="text" id="news-video-url" class="input-dark w-50 mb-0" placeholder="رابط فيديو (يوتيوب أو درايف)...">
-                        </div>
-                        <img id="news-preview" class="media-preview" style="display: none;">
-                        <button class="btn-neon w-100 mt-3" onclick="addNews()">نشر الخبر</button>
-                    </div>
+    <h5 class="text-neon mb-3"><i class="fa-solid fa-pen-nib"></i> إضافة خبر جديد</h5>
+    <input type="text" id="news-title" class="input-dark mb-2" placeholder="عنوان الخبر (إجباري)...">
+    <textarea id="news-text" class="input-dark mb-2" rows="3" placeholder="اكتب تفاصيل الخبر هنا..."></textarea>
+    <div class="d-flex gap-2 mt-2 mb-2">
+        <select id="news-media-type" class="input-dark w-25 mb-0" style="padding: 10px;">
+            <option value="youtube">يوتيوب</option>
+            <option value="drive">جوجل درايف</option>
+            <option value="image_link">صورة برابط</option>
+            <option value="link">رابط عادي</option>
+        </select>
+        <input type="text" id="news-media-url" class="input-dark w-50 mb-0" placeholder="ضع الرابط هنا...">
+        <label class="btn-outline w-25 text-center mb-0" style="padding: 10px; cursor:pointer;"><i class="fa-solid fa-upload"></i> رفع صورة <input type="file" id="news-image" style="display: none;" onchange="previewNewsImage(event)"></label>
+    </div>
+    <img id="news-preview" class="media-preview" style="display: none;">
+    <button class="btn-neon w-100 mt-3" onclick="addNews()">نشر الخبر</button>
+</div>
+
+
                     <div id="news-feed"></div>
+                    
                 </div>
             </div>
         </main>
@@ -120,13 +131,22 @@
                 <h3 id="current-sign-cat-title" class="mb-4 text-neon"></h3>
                 
                 <div class="card-dark admin-only mb-4" style="display: none;">
-                    <h5 class="text-white mb-3">إضافة إشارة جديدة للقسم</h5>
-                    <input type="text" id="sign-title" class="input-dark" placeholder="اسم الإشارة">
-                    <textarea id="sign-desc" class="input-dark" rows="2" placeholder="شرح الإشارة التفصيلي..."></textarea>
-                    <label class="btn-outline w-100 mb-2 text-center"><i class="fa-solid fa-image"></i> صورة توضيحية من الجهاز <input type="file" id="sign-img" accept="image/*" style="display: none;"></label>
-                    <input type="text" id="sign-video" class="input-dark" placeholder="رابط فيديو لتعلم الإشارة (يوتيوب أو درايف)...">
-                    <button class="btn-neon w-100 mt-2" onclick="addItem('signs')">حفظ الإشارة</button>
-                </div>
+    <h4 class="text-neon mb-3"><i class="fa-solid fa-plus"></i> إضافة إشارة جديدة</h4>
+    <input type="text" id="sign-title" class="input-dark" placeholder="اسم الإشارة...">
+    <textarea id="sign-desc" class="input-dark" rows="3" placeholder="شرح الإشارة..."></textarea>
+    <div class="d-flex gap-2 mt-2 mb-2">
+        <select id="sign-media-type" class="input-dark w-25 mb-0" style="padding: 10px;">
+            <option value="youtube">يوتيوب</option>
+            <option value="drive">جوجل درايف</option>
+            <option value="image_link">صورة برابط</option>
+            <option value="link">رابط عادي</option>
+        </select>
+        <input type="text" id="sign-media-url" class="input-dark w-50 mb-0" placeholder="ضع الرابط هنا...">
+        <label class="btn-outline w-25 text-center mb-0" style="padding: 10px; cursor:pointer;"><i class="fa-solid fa-upload"></i> رفع صورة <input type="file" id="sign-img" style="display: none;"></label>
+    </div>
+    <button class="btn-neon w-100 mt-3" onclick="addItem('signs')">حفظ الإشارة</button>
+</div>
+
                 <div id="signs-items-list" class="row"></div>
             </div>
         </main>
@@ -148,13 +168,22 @@
                 <h3 id="current-book-cat-title" class="mb-4 text-neon"></h3>
                 
                 <div class="card-dark admin-only mb-4" style="display: none;">
-                    <h5 class="text-white mb-3">إضافة كتاب جديد</h5>
-                    <input type="text" id="book-title" class="input-dark" placeholder="اسم الكتاب">
-                    <textarea id="book-desc" class="input-dark" rows="2" placeholder="نبذة ووصف عن الكتاب..."></textarea>
-                    <label class="btn-outline w-100 mb-2 text-center"><i class="fa-solid fa-image"></i> صورة غلاف الكتاب <input type="file" id="book-img" accept="image/*" style="display: none;"></label>
-                    <input type="text" id="book-video" class="input-dark" placeholder="رابط الكتاب (رابط PDF أو رابط جوجل درايف)...">
-                    <button class="btn-neon w-100 mt-2" onclick="addItem('books')">إضافة الكتاب</button>
-                </div>
+    <h4 class="text-warning mb-3"><i class="fa-solid fa-plus"></i> إضافة كتاب / ملف</h4>
+    <input type="text" id="book-title" class="input-dark" placeholder="اسم الكتاب...">
+    <textarea id="book-desc" class="input-dark" rows="3" placeholder="وصف الكتاب..."></textarea>
+    <div class="d-flex gap-2 mt-2 mb-2">
+        <select id="book-media-type" class="input-dark w-25 mb-0" style="padding: 10px;">
+            <option value="drive">جوجل درايف (PDF/فيديو)</option>
+            <option value="youtube">يوتيوب</option>
+            <option value="image_link">صورة غلاف برابط</option>
+            <option value="link">رابط تحميل عادي</option>
+        </select>
+        <input type="text" id="book-media-url" class="input-dark w-50 mb-0" placeholder="ضع الرابط هنا...">
+        <label class="btn-outline w-25 text-center mb-0" style="padding: 10px; cursor:pointer;"><i class="fa-solid fa-upload"></i> رفع غلاف <input type="file" id="book-img" style="display: none;"></label>
+    </div>
+    <button class="btn-warning w-100 mt-3 text-dark fw-bold" onclick="addItem('books')">إضافة الكتاب</button>
+</div>
+
                 <div id="books-items-list" class="row"></div>
             </div>
         </main>
@@ -165,17 +194,23 @@
                     <h2 class="text-neon mb-4 text-center"><i class="fa-solid fa-school"></i> دليل المدارس</h2>
                     
                     <div class="card-dark admin-only mb-4" style="display: none;">
-                        <h5 class="text-white mb-3">إضافة مدرسة جديدة</h5>
-                        <input type="text" id="school-name" class="input-dark" placeholder="اسم المدرسة">
-                        <textarea id="school-info" class="input-dark" rows="2" placeholder="نبذة ووصف للمدرسة..."></textarea>
-                        <input type="text" id="school-location" class="input-dark" placeholder="رابط الموقع (Google Maps)">
-                        <div class="d-flex gap-2 mt-2">
-                            <label class="btn-outline w-50 text-center"><i class="fa-solid fa-image"></i> صورة للمدرسة <input type="file" id="school-img" accept="image/*" style="display: none;" onchange="previewSchoolImage(event)"></label>
-                            <input type="text" id="school-video" class="input-dark w-50 mb-0" placeholder="رابط فيديو تعريفي...">
-                        </div>
-                        <img id="school-preview" class="media-preview" style="display: none;">
-                        <button class="btn-neon w-100 mt-3" onclick="addSchool()">إضافة المدرسة</button>
-                    </div>
+    <h3 class="text-neon mb-3"><i class="fa-solid fa-school"></i> إضافة مدرسة جديدة</h3>
+    <input type="text" id="school-name" class="input-dark" placeholder="اسم المدرسة...">
+    <input type="text" id="school-location" class="input-dark" placeholder="رابط خرائط جوجل (اختياري)...">
+    <textarea id="school-info" class="input-dark" rows="3" placeholder="معلومات وشروط التقديم..."></textarea>
+    <div class="d-flex gap-2 mt-2 mb-2">
+        <select id="school-media-type" class="input-dark w-25 mb-0" style="padding: 10px;">
+            <option value="youtube">فيديو تعريفي (يوتيوب)</option>
+            <option value="image_link">صورة خارجية (برابط)</option>
+            <option value="drive">مرفق من درايف</option>
+        </select>
+        <input type="text" id="school-media-url" class="input-dark w-50 mb-0" placeholder="ضع الرابط هنا...">
+        <label class="btn-outline w-25 text-center mb-0" style="padding: 10px; cursor:pointer;"><i class="fa-solid fa-upload"></i> رفع صورة <input type="file" id="school-img" style="display: none;" onchange="previewSchoolImage(event)"></label>
+    </div>
+    <img id="school-preview" class="media-preview" style="display: none;">
+    <button class="btn-neon w-100 mt-3" onclick="addSchool()">إضافة المدرسة</button>
+</div>
+
                     <div id="schools-list"></div>
                 </div>
             </div>
@@ -344,6 +379,6 @@
     </div>
 
     <script src="data.js"></script>
-    <script src="main.js?v=3"></script>
+    <script src="main.js"></script>
 </body>
 </html>

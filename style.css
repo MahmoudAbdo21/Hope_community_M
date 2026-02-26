@@ -115,3 +115,48 @@ body {
 .post-image:hover {
     transform: scale(1.01);
 }
+
+/* ================= تحسينات الميديا الذكية والنصوص (CSS) ================= */
+.smart-media-img {
+    width: 100% !important;
+    max-height: 400px !important;
+    object-fit: cover !important; /* بيفرد الصورة ويقص الزيادة بشياكة */
+    border-radius: 12px !important;
+    margin: 15px 0 !important;
+    cursor: zoom-in !important;
+    border: 1px solid rgba(255, 255, 255, 0.05) !important;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2) !important;
+    display: block !important;
+    transition: transform 0.3s ease !important;
+}
+.smart-media-img:hover {
+    transform: scale(1.02);
+}
+
+.smart-media-iframe {
+    width: 100% !important;
+    aspect-ratio: 16 / 9 !important; /* بيخلي الفيديو بمقاس اليوتيوب الأصلي بدون مسافات سودا */
+    border-radius: 12px !important;
+    margin: 15px 0 !important;
+    border: 1px solid rgba(255, 255, 255, 0.05) !important;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2) !important;
+    background: #050505 !important;
+}
+
+/* تصميم زرار عرض المزيد */
+.text-toggle-btn {
+    color: var(--neon);
+    font-weight: bold;
+    cursor: pointer;
+    font-size: 13px;
+    margin-right: 5px;
+    padding: 3px 8px;
+    border-radius: 5px;
+    background: rgba(69, 178, 107, 0.1);
+    transition: 0.3s;
+    display: inline-block;
+}
+.text-toggle-btn:hover {
+    background: var(--neon);
+    color: #141416;
+}
