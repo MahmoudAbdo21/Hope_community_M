@@ -373,3 +373,22 @@ async function translateText(text, fromLang, toLang) { let from = fromLang.subst
 function startRecording() { const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition; if (!SpeechRecognition) return alert("متصفحك لا يدعم هذه الميزة."); let otherLang = document.getElementById('other-lang').value; let myLang = document.getElementById('my-lang').value; const recognition = new SpeechRecognition(); recognition.lang = otherLang; recognition.interimResults = false; let btn = document.getElementById('btn-record'); let originalHtml = btn.innerHTML; btn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> جاري الاستماع...'; btn.style.background = "#ff4d4d"; recognition.start(); recognition.onresult = async event => { let originalText = event.results[0][0].transcript; btn.innerHTML = '<i class="fa-solid fa-language fa-fade"></i> جاري الترجمة...'; btn.style.background = "#17a2b8"; let translatedText = await translateText(originalText, otherLang, myLang); document.getElementById('stt-result').value = translatedText; btn.innerHTML = originalHtml; btn.style.background = "var(--neon)"; }; recognition.onspeechend = () => recognition.stop(); recognition.onerror = () => { alert("لم يتم سماع شيء بوضوح."); btn.innerHTML = originalHtml; btn.style.background = "var(--neon)"; }; }
 async function speakText() { let text = document.getElementById('tts-input').value; if(!text) return alert("اكتب رسالة أولاً!"); if (!window.speechSynthesis) return alert("متصفحك لا يدعم النطق الصوتي."); let myLang = document.getElementById('my-lang').value; let otherLang = document.getElementById('other-lang').value; let btn = document.getElementById('btn-speak'); let originalHtml = btn.innerHTML; btn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> جاري التجهيز...'; let translatedText = await translateText(text, myLang, otherLang); btn.innerHTML = '<i class="fa-solid fa-volume-high fa-beat"></i> جاري النطق...'; let utterance = new SpeechSynthesisUtterance(translatedText); utterance.lang = otherLang; utterance.rate = 0.6; if (availableVoices.length === 0) availableVoices = window.speechSynthesis.getVoices(); let voice = availableVoices.find(v => v.lang.replace('_', '-') === otherLang) || availableVoices.find(v => v.lang.startsWith(otherLang.substring(0, 2))); if (otherLang === 'ar-EG' || otherLang === 'ar-SA') { let arabicVoice = availableVoices.find(v => v.lang === 'ar-EG' || v.name.includes('Egypt') || v.name.includes('Arabic')); if (arabicVoice) voice = arabicVoice; } if (voice) utterance.voice = voice; utterance.onend = () => btn.innerHTML = originalHtml; utterance.onerror = () => btn.innerHTML = originalHtml; window.speechSynthesis.speak(utterance); }
 function generateGithubCode() { let data = { siteName: localStorage.getItem('siteName'), siteLogo: localStorage.getItem('siteLogo'), adminProfilePic: localStorage.getItem('adminProfilePic'), my_news: localStorage.getItem('my_news'), signs_cats: localStorage.getItem('signs_cats'), books_cats: localStorage.getItem('books_cats'), schools_data: localStorage.getItem('schools_data') }; let code = `const defaultData = ${JSON.stringify(data, null, 4)};`; navigator.clipboard.writeText(code).then(() => alert('تم النسخ!')).catch(() => alert('حدث خطأ في النسخ.')); }
+
+// ================= زرار الفرمتة ومسح البيانات بالكامل =================
+function forceSyncData() {
+    let warningMsg = "تحذير نهائي ⚠️\n\nهذا الزر سيقوم بـ 'فرمتة' الموقع بالكامل من جهازك.\nسيتم مسح (كل الأخبار، الإشارات، المدارس، المكتبة) التي أضفتها يدوياً مؤخراً.\n\nهل أنت متأكد من رغبتك في مسح كل شيء وإجبار الموقع على قراءة ملف data.js فقط؟";
+    
+    if (confirm(warningMsg)) {
+        // 1. تدمير كل البيانات المحفوظة على المتصفح بالكامل
+        localStorage.clear();
+        
+        // 2. إرجاع صلاحية المدير فقط عشان متضطرش تكتب الباسورد (2026) تاني
+        localStorage.setItem('isAdmin', 'true');
+        
+        // 3. رسالة تأكيد
+        alert("تم مسح كل البيانات المحلية بنجاح! 🗑️\nسيتم الآن إعادة تشغيل الموقع لسحب البيانات النظيفة من ملف data.js.");
+        
+        // 4. إعادة تحميل إجبارية من السيرفر مش من الكاش
+        window.location.reload(true);
+    }
+}
